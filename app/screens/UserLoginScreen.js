@@ -7,7 +7,10 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from "react-native";
+import { connect } from "react-redux";
+import { userLogin } from "../config/actions/userActions";
 
 import colors from "../config/colors";
 
@@ -22,7 +25,42 @@ class UserLoginScreen extends Component {
   }
 
   handleLoginPress = (event) => {
-    // do fetch stuff
+    const userLoginURL = "http://10.0.0.136:4000/api/v1/user_login";
+
+    const loginData = {
+      user: {
+        username: this.state.username.toLowerCase(),
+        password: this.state.password,
+      },
+    };
+
+    const reqObj = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accepts: "application/json",
+      },
+      body: JSON.stringify(loginData),
+    };
+
+    fetch(userLoginURL, reqObj)
+      .then((resp) => resp.json())
+      .then((obj) => {
+        if (obj.status === 200) {
+          this.props.userLogin(obj.user);
+          this.props.navigation.navigate("UserHome");
+        } else {
+          Alert.alert("Invalid username or password!", "Please try again.", [
+            {
+              text: "OK",
+              onPress: () => this.setState({ username: "", password: "" }),
+            },
+          ]);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   onRegisterRoutePress = () => {
@@ -36,6 +74,12 @@ class UserLoginScreen extends Component {
         contentContainerStyle={styles.userLoginScreenContainer}
       >
         <StatusBar barStyle="dark-content" />
+        <Text
+          onPress={() => this.props.navigation.goBack()}
+          style={styles.backButton}
+        >
+          Back
+        </Text>
         <Text style={styles.appName}>T R I N Y X</Text>
         <Text style={styles.appSlogan}>Find Deals In Your Community</Text>
         <TextInput
@@ -76,6 +120,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white",
+  },
+  backButton: {
+    position: "absolute",
+    left: 30,
+    top: 70,
+    color: colors.primary,
+    fontSize: 20,
   },
   appName: {
     fontSize: 45,
@@ -126,4 +177,16 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserLoginScreen;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    userLogin: (user) => dispatch(userLogin(user)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserLoginScreen);

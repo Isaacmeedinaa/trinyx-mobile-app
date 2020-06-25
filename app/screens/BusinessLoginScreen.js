@@ -6,8 +6,11 @@ import {
   ScrollView,
   Text,
   TextInput,
+  Alert,
   TouchableOpacity,
 } from "react-native";
+import { connect } from "react-redux";
+import { businessLogin } from "../config/actions/businessActions";
 
 import colors from "../config/colors";
 
@@ -22,11 +25,43 @@ class BusinessLoginScreen extends Component {
   }
 
   handleLoginPress = (event) => {
-    // do fetch stuff
+    const businessLoginURL = "http://10.0.0.136:4000/api/v1/business_login";
+
+    const loginData = {
+      business: {
+        email: this.state.email.toLowerCase(),
+        password: this.state.password,
+      },
+    };
+
+    const reqObj = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accepts: "application/json",
+      },
+      body: JSON.stringify(loginData),
+    };
+
+    fetch(businessLoginURL, reqObj)
+      .then((resp) => resp.json())
+      .then((obj) => {
+        if (obj.status === 200) {
+          this.props.businessLogin(obj.business);
+          this.props.navigation.navigate("BusinessHome");
+        } else {
+          Alert.alert("Invalid email or password!", "Please try again.", [
+            {
+              text: "OK",
+              onPress: () => this.setState({ email: "", password: "" }),
+            },
+          ]);
+        }
+      });
   };
 
   onRegisterRoutePress = () => {
-    // do routing stuff
+    this.props.navigation.navigate("BusinessRegister");
   };
 
   render() {
@@ -36,6 +71,12 @@ class BusinessLoginScreen extends Component {
         contentContainerStyle={styles.businessLoginScreenContainer}
       >
         <StatusBar barStyle="dark-content" />
+        <Text
+          onPress={() => this.props.navigation.goBack()}
+          style={styles.backButton}
+        >
+          Back
+        </Text>
         <Text style={styles.appName}>T R I N Y X</Text>
         <Text style={styles.appSlogan}>Upload Deals In Your Community</Text>
         <TextInput
@@ -76,6 +117,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white",
+  },
+  backButton: {
+    position: "absolute",
+    left: 30,
+    top: 70,
+    color: colors.primary,
+    fontSize: 20,
   },
   appName: {
     fontSize: 45,
@@ -126,4 +174,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BusinessLoginScreen;
+const mapStateToProps = (state) => {
+  return {
+    business: state.business,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    businessLogin: (business) => dispatch(businessLogin(business)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BusinessLoginScreen);
