@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
   StyleSheet,
   StatusBar,
@@ -9,24 +9,32 @@ import {
 
 import colors from "../config/colors";
 
-const WelcomeScreen = (props) => {
-  return (
-    <View style={styles.welcomeScreenContainer}>
-      <StatusBar barStyle="dark-content" />
-      <Text style={styles.appName}>T R I N Y X</Text>
-      <Text style={styles.appSlogan}>Find Deals In Your Community</Text>
-      <Text style={styles.continueAsA}>Continue As A:</Text>
-      <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.buttonUser}>
-          <Text style={styles.buttonText}>User</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonBusiness}>
-          <Text style={styles.buttonText}>Business</Text>
-        </TouchableOpacity>
+class WelcomeScreen extends Component {
+  render() {
+    return (
+      <View style={styles.welcomeScreenContainer}>
+        <StatusBar barStyle="dark-content" />
+        <Text style={styles.appName}>T R I N Y X</Text>
+        <Text style={styles.appSlogan}>Find Deals In Your Community</Text>
+        <Text style={styles.continueAsA}>Continue As A:</Text>
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("UserLogin")}
+            style={styles.buttonUser}
+          >
+            <Text style={styles.buttonText}>User</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("BusinessLogin")}
+            style={styles.buttonBusiness}
+          >
+            <Text style={styles.buttonText}>Business</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
-  );
-};
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   welcomeScreenContainer: {
