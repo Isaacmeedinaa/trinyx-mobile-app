@@ -3,6 +3,9 @@ const business = (state = {}, action) => {
     case "BUSINESS_LOGIN_SUCCESS":
       return action.business;
 
+    case "BUSINESS_REGISTER_SUCCESS":
+      return action.business;
+
     case "SET_BUSINESS":
       return action.business;
 

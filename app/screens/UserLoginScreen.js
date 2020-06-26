@@ -64,7 +64,7 @@ class UserLoginScreen extends Component {
   };
 
   onRegisterRoutePress = () => {
-    // do routing stuff
+    this.props.navigation.navigate("UserRegister");
   };
 
   render() {

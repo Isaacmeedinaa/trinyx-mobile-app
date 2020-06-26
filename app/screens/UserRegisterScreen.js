@@ -11,38 +11,39 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { businessRegister } from "../config/actions/businessActions";
+import { userRegister } from "../config/actions/userActions";
 
 import colors from "../config/colors";
 
-class BusinessRegisterScreen extends Component {
+class UserRegisterScreen extends Component {
   constructor() {
     super();
 
     this.state = {
-      name: "",
-      business_industry: "",
+      first_name: "",
+      last_name: "",
+      age: null,
       email: "",
-      phone_number: "",
       location: "",
+      username: "",
       password: "",
-      password_confirmation: "",
+      confirm_password: "",
     };
   }
 
   handleRegisterPress = () => {
-    const businessRegisterURL =
-      "http://10.0.0.136:4000/api/v1/business_register";
+    const userRegisterURL = "http://10.0.0.136:4000/api/v1/user_register";
 
     const registerData = {
-      business: {
-        name: this.state.name,
-        business_industry: this.state.business_industry,
-        email: this.state.email.toLowerCase(),
-        phone_number: this.state.phone_number,
+      user: {
+        first_name: this.state.first_name,
+        last_name: this.state.last_name,
+        age: parseInt(this.state.age),
+        email: this.state.email,
         location: this.state.location,
+        username: this.state.username.toLowerCase(),
         password: this.state.password,
-        password_confirmation: this.state.password_confirmation,
+        confirm_password: this.state.confirm_password,
       },
     };
 
@@ -50,17 +51,17 @@ class BusinessRegisterScreen extends Component {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Accepts: "application/json",
+        Application: "application/json",
       },
       body: JSON.stringify(registerData),
     };
 
-    fetch(businessRegisterURL, reqObj)
+    fetch(userRegisterURL, reqObj)
       .then((resp) => resp.json())
       .then((obj) => {
         if (obj.status === 200) {
-          this.props.businessRegister(obj.business);
-          this.props.navigation.navigate("BusinessHome");
+          this.props.userRegister(obj.user);
+          this.props.navigation.navigate("UserHome");
         } else {
           Alert.alert(obj.messages, "Please try again.", [
             {
@@ -75,10 +76,10 @@ class BusinessRegisterScreen extends Component {
 
   render() {
     return (
-      <View style={styles.businessRegisterScreenContainer}>
+      <View style={styles.userRegisterScreenContainer}>
         <StatusBar barStyle="dark-content" />
         <KeyboardAwareScrollView
-          contentContainerStyle={styles.businessRegisterScrollView}
+          contentContainerStyle={styles.userRegisterScrollView}
         >
           <Text
             onPress={() => this.props.navigation.goBack()}
@@ -89,28 +90,32 @@ class BusinessRegisterScreen extends Component {
           <Text style={styles.appName}>T R I N Y X</Text>
           <Text style={styles.appSlogan}>Find Deals In Your Community</Text>
           <TextInput
-            style={[
-              styles.businessRegisterTextInput,
-              styles.firstTextInputMargin,
-            ]}
-            placeholder="Name"
+            style={[styles.userRegisterTextInput, styles.firstTextInputMargin]}
+            placeholder="First Name"
             placeholderTextColor="#5e5e5e"
             textContentType="name"
-            onChangeText={(name) => this.setState({ name })}
-            value={this.state.name}
+            onChangeText={(first_name) => this.setState({ first_name })}
+            value={this.state.first_name}
           />
           <TextInput
-            style={styles.businessRegisterTextInput}
-            placeholder="Business Indusry"
+            style={styles.userRegisterTextInput}
+            placeholder="Last Name"
             placeholderTextColor="#5e5e5e"
-            keyboardType="default"
-            onChangeText={(business_industry) =>
-              this.setState({ business_industry })
-            }
-            value={this.state.business_industry}
+            textContentType="name"
+            onChangeText={(last_name) => this.setState({ last_name })}
+            value={this.state.last_name}
           />
           <TextInput
-            style={styles.businessRegisterTextInput}
+            style={styles.userRegisterTextInput}
+            placeholder="Age"
+            placeholderTextColor="#5e5e5e"
+            // textContentType="name"
+            keyboardType="number-pad"
+            onChangeText={(age) => this.setState({ age })}
+            value={this.state.age}
+          />
+          <TextInput
+            style={styles.userRegisterTextInput}
             placeholder="Email"
             placeholderTextColor="#5e5e5e"
             textContentType="emailAddress"
@@ -119,16 +124,7 @@ class BusinessRegisterScreen extends Component {
             value={this.state.email}
           />
           <TextInput
-            style={styles.businessRegisterTextInput}
-            placeholder="Phone Number"
-            placeholderTextColor="#5e5e5e"
-            textContentType="telephoneNumber"
-            keyboardType="phone-pad"
-            onChangeText={(phone_number) => this.setState({ phone_number })}
-            value={this.state.phone_number}
-          />
-          <TextInput
-            style={styles.businessRegisterTextInput}
+            style={styles.userRegisterTextInput}
             placeholder="Location"
             placeholderTextColor="#5e5e5e"
             textContentType="streetAddressLine1"
@@ -136,7 +132,15 @@ class BusinessRegisterScreen extends Component {
             value={this.state.location}
           />
           <TextInput
-            style={styles.businessRegisterTextInput}
+            style={styles.userRegisterTextInput}
+            placeholder="Username"
+            placeholderTextColor="#5e5e5e"
+            textContentType="name"
+            onChangeText={(username) => this.setState({ username })}
+            value={this.state.username}
+          />
+          <TextInput
+            style={styles.userRegisterTextInput}
             placeholder="Password"
             placeholderTextColor="#5e5e5e"
             textContentType="password"
@@ -145,18 +149,18 @@ class BusinessRegisterScreen extends Component {
             value={this.state.password}
           />
           <TextInput
-            style={styles.businessRegisterTextInput}
+            style={styles.userRegisterTextInput}
             placeholder="Confirm Password"
             placeholderTextColor="#5e5e5e"
             textContentType="password"
             secureTextEntry={true}
-            onChangeText={(password_confirmation) =>
-              this.setState({ password_confirmation })
+            onChangeText={(confirm_password) =>
+              this.setState({ confirm_password })
             }
-            value={this.state.password_confirmation}
+            value={this.state.confirm_password}
           />
           <TouchableOpacity
-            style={styles.registerBusinessBtn}
+            style={styles.regiserUserBtn}
             onPress={this.handleRegisterPress}
           >
             <Text style={styles.buttonText}>Register</Text>
@@ -174,12 +178,12 @@ class BusinessRegisterScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  businessRegisterScreenContainer: {
+  userRegisterScreenContainer: {
     flex: 1,
     backgroundColor: "white",
     width: "100%",
   },
-  businessRegisterScrollView: {
+  userRegisterScrollView: {
     justifyContent: "center",
     alignItems: "center",
     paddingTop: 150,
@@ -204,7 +208,7 @@ const styles = StyleSheet.create({
   firstTextInputMargin: {
     marginTop: 40,
   },
-  businessRegisterTextInput: {
+  userRegisterTextInput: {
     width: 270,
     height: 42,
     paddingRight: 10,
@@ -214,7 +218,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: 5,
   },
-  registerBusinessBtn: {
+  regiserUserBtn: {
     width: 270,
     height: 42,
     marginTop: 28,
@@ -236,8 +240,8 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    businessRegister: (business) => dispatch(businessRegister(business)),
+    userRegister: (user) => dispatch(userRegister(user)),
   };
 };
 
-export default connect(null, mapDispatchToProps)(BusinessRegisterScreen);
+export default connect(null, mapDispatchToProps)(UserRegisterScreen);

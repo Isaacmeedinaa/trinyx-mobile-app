@@ -3,6 +3,9 @@ const user = (state = {}, action) => {
     case "USER_LOGIN_SUCCESS":
       return action.user;
 
+    case "USER_REGISTER_SUCCESS":
+      return action.user;
+
     case "SET_USER":
       return action.user;
 
