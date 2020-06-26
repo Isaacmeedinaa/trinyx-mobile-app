@@ -5,6 +5,13 @@ export const businessLogin = (business) => {
   };
 };
 
+export const businessRegister = (business) => {
+  return {
+    type: "BUSINESS_REGISTER_SUCCESS",
+    business,
+  };
+};
+
 export const setBusiness = (business) => {
   return {
     type: "SET_BUSINESS",

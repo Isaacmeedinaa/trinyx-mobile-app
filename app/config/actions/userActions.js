@@ -5,6 +5,13 @@ export const userLogin = (user) => {
   };
 };
 
+export const userRegister = (user) => {
+  return {
+    type: "USER_REGISTER_SUCCESS",
+    user,
+  };
+};
+
 export const setUser = (user) => {
   return {
     type: "SET_USER",

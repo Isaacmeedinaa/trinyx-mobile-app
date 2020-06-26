@@ -7,8 +7,9 @@ import rootReducer from "./app/config/reducers";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import WelcomeScreen from "./app/screens/WelcomeScreen";
-import BusinessLoginScreen from "./app/screens/BusinessLoginScreen";
 import UserLoginScreen from "./app/screens/UserLoginScreen";
+import BusinessLoginScreen from "./app/screens/BusinessLoginScreen";
+import UserRegisterScreen from "./app/screens/UserRegisterScreen";
 import BusinessRegisterScreen from "./app/screens/BusinessRegisterScreen";
 import UserHomeScreen from "./app/screens/UserHomeScreen";
 import BusinessHomeScreen from "./app/screens/BusinessHomeScreen";
@@ -33,6 +34,7 @@ export default function App() {
             options={{ gestureEnabled: false }}
           />
           <Stack.Screen name="UserLogin" component={UserLoginScreen} />
+          <Stack.Screen name="UserRegister" component={UserRegisterScreen} />
           <Stack.Screen name="BusinessLogin" component={BusinessLoginScreen} />
           <Stack.Screen
             name="BusinessRegister"
