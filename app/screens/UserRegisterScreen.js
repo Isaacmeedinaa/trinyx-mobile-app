@@ -14,6 +14,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { userRegister } from "../config/actions/userActions";
 
 import colors from "../config/colors";
+import { IP_ADDRESS } from "../config/ip";
 
 class UserRegisterScreen extends Component {
   constructor() {
@@ -32,7 +33,7 @@ class UserRegisterScreen extends Component {
   }
 
   handleRegisterPress = () => {
-    const userRegisterURL = "http://10.0.0.136:4000/api/v1/user_register";
+    const userRegisterURL = `http://${IP_ADDRESS}:4000/api/v1/user_register`;
 
     const registerData = {
       user: {

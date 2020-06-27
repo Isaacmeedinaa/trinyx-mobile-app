@@ -1,51 +1,56 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 import { setUser, logoutUser } from "../config/actions/userActions";
+import { NavigationContainer, TabActions } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
+import AllDealsScreen from "./tabs/AllDealsScreen";
+import HottestDealsScreen from "./tabs/HottestDealsScreen";
+import UserMoreScreen from "./tabs/UserMoreScreen";
+import UserToolbar from "./toolbars/UserToolbar";
 
 import colors from "../config/colors";
 
-class UserHomeScreen extends Component {
-  handleLogoutPress = () => {
-    this.props.logoutUser();
-    this.props.navigation.navigate("Welcome");
-  };
+const Tab = createBottomTabNavigator();
 
+class UserHomeScreen extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text>{this.props.user.username}</Text>
-        <TouchableOpacity
-          style={styles.logoutButton}
-          onPress={this.handleLogoutPress}
+      <Fragment>
+        <UserToolbar />
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+
+              if (route.name === "AllDeals") {
+                iconName = focused ? "ios-apps" : "ios-apps";
+              } else if (route.name === "HottestDeals") {
+                iconName = focused ? "ios-flame" : "ios-flame";
+              } else if (route.name === "UserMore") {
+                iconName = focused ? "ios-list-box" : "ios-list";
+              }
+
+              return <Ionicons name={iconName} size={32} color={color} />;
+            },
+          })}
+          tabBarOptions={{
+            activeTintColor: colors.primary,
+            inactiveTintColor: "gray",
+            showLabel: false,
+          }}
         >
-          <Text style={styles.buttonText}>Log Out</Text>
-        </TouchableOpacity>
-      </View>
+          <Tab.Screen name="AllDeals" component={AllDealsScreen} />
+          <Tab.Screen name="HottestDeals" component={HottestDealsScreen} />
+          <Tab.Screen name="UserMore" component={UserMoreScreen} />
+        </Tab.Navigator>
+      </Fragment>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  logoutButton: {
-    width: 270,
-    height: 42,
-    marginTop: 28,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: colors.primary,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-  },
-});
+const styles = StyleSheet.create({});
 
 const mapStateToProps = (state) => {
   return {
@@ -54,10 +59,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    setUser: (user) => dispatch(setUser(user)),
-    logoutUser: () => dispatch(logoutUser()),
-  };
+  return {};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserHomeScreen);
