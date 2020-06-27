@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import { userLogin } from "../config/actions/userActions";
 
 import colors from "../config/colors";
+import { IP_ADDRESS } from "../config/ip";
 
 class UserLoginScreen extends Component {
   constructor() {
@@ -24,8 +25,8 @@ class UserLoginScreen extends Component {
     };
   }
 
-  handleLoginPress = (event) => {
-    const userLoginURL = "http://10.0.0.136:4000/api/v1/user_login";
+  handleLoginPress = () => {
+    const userLoginURL = `http://${IP_ADDRESS}:4000/api/v1/user_login`;
 
     const loginData = {
       user: {

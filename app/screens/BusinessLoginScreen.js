@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import { businessLogin } from "../config/actions/businessActions";
 
 import colors from "../config/colors";
+import { IP_ADDRESS } from "../config/ip";
 
 class BusinessLoginScreen extends Component {
   constructor() {
@@ -25,7 +26,7 @@ class BusinessLoginScreen extends Component {
   }
 
   handleLoginPress = (event) => {
-    const businessLoginURL = "http://10.0.0.136:4000/api/v1/business_login";
+    const businessLoginURL = `http://${IP_ADDRESS}:4000/api/v1/business_login`;
 
     const loginData = {
       business: {
