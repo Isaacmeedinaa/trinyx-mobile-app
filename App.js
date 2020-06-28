@@ -13,6 +13,10 @@ import UserRegisterScreen from "./app/screens/UserRegisterScreen";
 import BusinessRegisterScreen from "./app/screens/BusinessRegisterScreen";
 import UserHomeScreen from "./app/screens/UserHomeScreen";
 import BusinessHomeScreen from "./app/screens/BusinessHomeScreen";
+import BusinessToolbar from "./app/screens/toolbars/BusinessToolbar";
+import BusinessComponentRight from "./app/screens/toolbars/BusinessComponentRight";
+import NewDealScreen from "./app/screens/NewDealScreen";
+import EditDealScreen from "./app/screens/EditDealScreen";
 import * as SecureStore from "expo-secure-store";
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
@@ -50,6 +54,13 @@ export default function App() {
             component={BusinessHomeScreen}
             options={{ gestureEnabled: false }}
           />
+          <Stack.Screen name="BusinessToolbar" component={BusinessToolbar} />
+          <Stack.Screen
+            name="BusinessComponentRight"
+            component={BusinessComponentRight}
+          />
+          <Stack.Screen name="NewDeal" component={NewDealScreen} />
+          <Stack.Screen name="EditDeal" component={EditDealScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

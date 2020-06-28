@@ -1,63 +1,61 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
-import { setBusiness, logoutBusiness } from "../config/actions/businessActions";
+import BusinessToolbar from "../screens/toolbars/BusinessToolbar";
+import { NavigationContainer, TabActions } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
+import BusinessDealsScreen from "../screens/tabs/BusinessDealsScreen";
+import BusinessProfileScreen from "../screens/tabs/BusinessProfileScreen";
+import BusinessMoreScreen from "../screens/tabs/BusinessMoreScreen";
 
 import colors from "../config/colors";
 
-class BusinessHomeScreen extends Component {
-  handleLogoutPress = () => {
-    this.props.logoutBusiness();
-    this.props.navigation.navigate("Welcome");
-  };
+const Tab = createBottomTabNavigator();
 
+class BusinessHomeScreen extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text>{this.props.business.name}</Text>
-        <TouchableOpacity
-          style={styles.logoutButton}
-          onPress={this.handleLogoutPress}
+      <Fragment>
+        <BusinessToolbar navigation={this.props.navigation} />
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+
+              if (route.name === "BusinessDeals") {
+                iconName = focused ? "ios-apps" : "ios-apps";
+              } else if (route.name === "BusinessProfile") {
+                iconName = focused ? "ios-business" : "ios-business";
+              } else if (route.name === "BusinessMore") {
+                iconName = focused ? "ios-list-box" : "ios-list";
+              }
+
+              return <Ionicons name={iconName} size={32} color={color} />;
+            },
+          })}
+          tabBarOptions={{
+            activeTintColor: colors.primary,
+            inactiveTintColor: "gray",
+            showLabel: false,
+          }}
         >
-          <Text style={styles.buttonText}>Log Out</Text>
-        </TouchableOpacity>
-      </View>
+          <Tab.Screen
+            name="BusinessDeals"
+            component={BusinessDealsScreen}
+            navigation={this.props.navigation}
+          />
+          <Tab.Screen
+            name="BusinessProfile"
+            component={BusinessProfileScreen}
+          />
+          <Tab.Screen name="BusinessMore" component={BusinessMoreScreen} />
+        </Tab.Navigator>
+      </Fragment>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  logoutButton: {
-    width: 270,
-    height: 42,
-    marginTop: 28,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: colors.primary,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-  },
-});
+const styles = StyleSheet.create({});
 
-const mapStateToProps = (state) => {
-  return {
-    business: state.business,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setBusiness: (business) => dispatch(setBusiness(business)),
-    logoutBusiness: () => dispatch(logoutBusiness()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(BusinessHomeScreen);
+export default BusinessHomeScreen;
