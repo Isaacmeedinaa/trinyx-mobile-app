@@ -22,6 +22,10 @@ class AllDealsScreen extends Component {
     this.props.fetchAllDeals();
   }
 
+  componentWillUnmount() {
+    this.props.fetchAllDeals();
+  }
+
   renderAllDeals = () => {
     return this.props.deals.map((deal) => {
       return <Deal deal={deal} key={deal.id} />;

@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { userLogin } from "../config/actions/userActions";
+import { fetchAllDeals } from "../config/actions/dealsActions";
 
 import colors from "../config/colors";
 import { IP_ADDRESS } from "../config/ip";
@@ -49,6 +50,7 @@ class UserLoginScreen extends Component {
       .then((obj) => {
         if (obj.status === 200) {
           this.props.userLogin(obj.user);
+          this.props.fetchAllDeals();
           this.props.navigation.navigate("UserHome");
         } else {
           Alert.alert("Invalid username or password!", "Please try again.", [
@@ -187,6 +189,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     userLogin: (user) => dispatch(userLogin(user)),
+    fetchAllDeals: () => dispatch(fetchAllDeals()),
   };
 };
 

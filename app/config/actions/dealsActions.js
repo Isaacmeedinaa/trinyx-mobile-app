@@ -10,3 +10,10 @@ export const fetchAllDeals = (deals) => {
       });
   };
 };
+
+export const addDeal = (deal) => {
+  return {
+    type: "ADD_DEAL",
+    deal,
+  };
+};

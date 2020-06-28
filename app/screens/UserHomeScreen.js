@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
-import { setUser, logoutUser } from "../config/actions/userActions";
+import { fetchAllDeals } from "../config/actions/dealsActions";
 import { NavigationContainer, TabActions } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
@@ -15,6 +15,14 @@ import colors from "../config/colors";
 const Tab = createBottomTabNavigator();
 
 class UserHomeScreen extends Component {
+  componentWillMount() {
+    this.props.fetchAllDeals();
+  }
+
+  componentWillUnmount() {
+    this.props.fetchAllDeals();
+  }
+
   render() {
     return (
       <Fragment>
@@ -59,7 +67,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    fetchAllDeals: () => dispatch(fetchAllDeals()),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserHomeScreen);

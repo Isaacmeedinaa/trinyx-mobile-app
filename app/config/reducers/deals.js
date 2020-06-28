@@ -3,6 +3,9 @@ const deals = (state = [], action) => {
     case "FETCH_ALL_DEALS":
       return action.deals;
 
+    case "ADD_DEAL":
+      return [...state, action.deal];
+
     default:
       return state;
   }

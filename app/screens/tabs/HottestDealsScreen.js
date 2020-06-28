@@ -14,6 +14,10 @@ class HottestDealsScreen extends Component {
     this.props.fetchHottestDeals();
   }
 
+  componentWillUnmount() {
+    this.props.fetchHottestDeals();
+  }
+
   renderHottestDeals = () => {
     return this.props.hotDeals.map((deal) => {
       return <HotDeal deal={deal} key={deal.id} />;
