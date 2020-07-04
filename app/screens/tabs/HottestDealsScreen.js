@@ -33,7 +33,7 @@ class HottestDealsScreen extends Component {
           showsVerticalScrollIndicator={false}
         >
           <Text style={styles.tabTitle}>Hottest Deals</Text>
-          <Text style={styles.tabSubTitle}>Total: 10</Text>
+          <Text style={styles.tabSubTitle}>Total: 2</Text>
           {this.renderHottestDeals()}
         </ScrollView>
       </View>

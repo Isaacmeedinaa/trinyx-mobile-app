@@ -15,7 +15,7 @@ import colors from "../config/colors";
 const Tab = createBottomTabNavigator();
 
 class UserHomeScreen extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchAllDeals();
   }
 
@@ -49,7 +49,11 @@ class UserHomeScreen extends Component {
             showLabel: false,
           }}
         >
-          <Tab.Screen name="AllDeals" component={AllDealsScreen} />
+          <Tab.Screen
+            name="AllDeals"
+            component={AllDealsScreen}
+            navigation={this.props.navigation}
+          />
           <Tab.Screen name="HottestDeals" component={HottestDealsScreen} />
           <Tab.Screen name="UserMore" component={UserMoreScreen} />
         </Tab.Navigator>

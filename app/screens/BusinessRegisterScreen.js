@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Geocoder from "react-native-geocoding";
 import { businessRegister } from "../config/actions/businessActions";
 
 import colors from "../config/colors";
@@ -26,12 +27,14 @@ class BusinessRegisterScreen extends Component {
       email: "",
       phone_number: "",
       location: "",
+      lat: null,
+      lng: null,
       password: "",
       password_confirmation: "",
     };
   }
 
-  handleRegisterPress = () => {
+  createAccount = () => {
     const businessRegisterURL = `http://${IP_ADDRESS}:4000/api/v1/business_register`;
 
     const registerData = {
@@ -41,6 +44,8 @@ class BusinessRegisterScreen extends Component {
         email: this.state.email.toLowerCase(),
         phone_number: this.state.phone_number,
         location: this.state.location,
+        lat: this.state.lat.toString(),
+        lng: this.state.lng.toString(),
         password: this.state.password,
         password_confirmation: this.state.password_confirmation,
       },
@@ -73,11 +78,27 @@ class BusinessRegisterScreen extends Component {
       .catch((err) => console.log(err));
   };
 
+  handleRegisterPress = () => {
+    Geocoder.init("AIzaSyCPVew2AXdWDOEdIFffJx6eF6r4CpUlx0E");
+    Geocoder.from(this.state.location)
+      .then((json) => {
+        let location = json.results[0].geometry.location;
+        this.setState({
+          lat: location.lat,
+          lng: location.lng,
+        });
+        this.createAccount();
+      })
+      .catch((error) => console.log(error));
+  };
+
   render() {
     return (
       <View style={styles.businessRegisterScreenContainer}>
         <StatusBar barStyle="dark-content" />
         <KeyboardAwareScrollView
+          keyboardShouldPersistTaps="always"
+          listViewDisplayed={false}
           contentContainerStyle={styles.businessRegisterScrollView}
         >
           <Text
@@ -129,7 +150,7 @@ class BusinessRegisterScreen extends Component {
           />
           <TextInput
             style={styles.businessRegisterTextInput}
-            placeholder="Location"
+            placeholder="123 Main St. City, ST 60601"
             placeholderTextColor="#5e5e5e"
             textContentType="streetAddressLine1"
             onChangeText={(location) => this.setState({ location })}

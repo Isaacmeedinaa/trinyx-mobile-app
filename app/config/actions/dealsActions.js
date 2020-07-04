@@ -17,3 +17,10 @@ export const addDeal = (deal) => {
     deal,
   };
 };
+
+export const searchDeals = (searchQuery) => {
+  return {
+    type: "SEARCH_DEALS",
+    searchQuery,
+  };
+};

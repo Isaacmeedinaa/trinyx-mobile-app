@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 import colors from "../config/colors";
 

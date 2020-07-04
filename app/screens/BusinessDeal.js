@@ -66,9 +66,10 @@ class BusinessDeal extends Component {
 
   render() {
     return (
-      <View
+      <TouchableOpacity
+        activeOpacity={1}
         style={styles.dealCard}
-        onStartShouldSetResponder={this.handleBusinessDealPress}
+        onPress={this.handleBusinessDealPress}
       >
         <Text style={styles.dealTitle}>{this.props.deal.title}</Text>
         <Text style={styles.dealDetails}>
@@ -106,7 +107,7 @@ class BusinessDeal extends Component {
             <Ionicons name="ios-trash" size={17} color={colors.primary} />
           </TouchableOpacity>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
