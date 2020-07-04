@@ -81,7 +81,6 @@ class EditDealScreen extends Component {
   };
 
   render() {
-    console.log(this.props);
     return (
       <View style={styles.editDealScreenContainer}>
         <StatusBar barStyle="dark-content" />

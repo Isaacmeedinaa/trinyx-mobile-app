@@ -15,7 +15,11 @@ import colors from "../config/colors";
 class HotDeal extends Component {
   render() {
     return (
-      <View style={styles.dealCard}>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={styles.dealCard}
+        onPress={this.handleHotDealPress}
+      >
         <Text style={styles.dealTitle}>{this.props.deal.title}</Text>
         <Text style={styles.dealDetails}>
           Posted by {this.props.deal.business.name} on{" "}
@@ -41,7 +45,7 @@ class HotDeal extends Component {
             {this.props.deal.comment_count}
           </Text>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }

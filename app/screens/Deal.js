@@ -7,6 +7,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { connect } from "react-redux";
+import {
+  fetchUserLikes,
+  addLike,
+  removeLike,
+} from "../config/actions/userLikesActions";
 import { Ionicons } from "@expo/vector-icons";
 import { IP_ADDRESS } from "../config/ip";
 
@@ -17,116 +22,54 @@ class Deal extends Component {
     super(props);
 
     this.state = {
-      currentUserLikes: [],
-      likesCount: props.deal.like_count,
       isLiked: props.deal.likes
-        .map((like) => like.user.id === this.props.user.id)
+        .map((like) => like.user.id === props.user.id)
         .includes(true),
-      commentsCount: props.deal.comment_count,
+      likesCount: props.deal.likes.length,
+      commentsCount: props.deal.comments.length,
     };
   }
 
   componentDidMount() {
-    fetch(`http:${IP_ADDRESS}:4000/api/v1/likes`)
-      .then((resp) => resp.json())
-      .then((likes) => {
-        let currentUserLikes = likes.filter(
-          (like) => like.user.id === this.props.user.id
-        );
-        this.setState({
-          currentUserLikes: currentUserLikes,
-        });
-      });
+    this.props.fetchUserLikes(this.props.user);
   }
 
+  handleDealPress = () => {
+    this.props.navigation.navigate("ShowDeal", {
+      dealId: this.props.deal.id,
+      deal: this.props.deal,
+      isLiked: this.state.isLiked,
+      likesCount: this.state.likesCount,
+      handleLikeDealPress: () => this.handleLikeDealPress(),
+      addCommentNum: () => this.addCommentNum(),
+      minusCommentNum: () => this.minusCommentNum(),
+    });
+  };
+
   createLike = () => {
-    const createLikeURL = `http:${IP_ADDRESS}:4000/api/v1/likes`;
+    const deal = this.props.deal;
+    const user = this.props.user;
+    const business = this.props.deal.business;
 
-    const likeData = {
-      like: {
-        user_id: this.props.user.id,
-        business_id: this.props.deal.business.id,
-        deal_id: this.props.deal.id,
-      },
-    };
-
-    const reqObj = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accepts: "application/json",
-      },
-      body: JSON.stringify(likeData),
-    };
-
-    fetch(createLikeURL, reqObj)
-      .then((resp) => resp.json())
-      .then((obj) => {
-        if (obj.status === 200) {
-          let newCurrentUserLikes = this.state.currentUserLikes.concat(
-            obj.like
-          );
-          this.setState({
-            isLiked: true,
-            currentUserLikes: newCurrentUserLikes,
-          });
-        } else {
-          console.log(obj.message);
-          this.setState({
-            isLiked: true,
-          });
-        }
-      })
-      .catch((err) => console.log(err));
+    this.props.addLike(deal, user, business);
   };
 
   deleteLike = () => {
-    let foundLike = this.state.currentUserLikes.find((like) => {
-      return like.deal.id === this.props.deal.id;
-    });
+    let dealLike = this.props.userLikes.find(
+      (like) => like.deal.id === this.props.deal.id
+    );
 
-    const deleteLikeURL = `http:${IP_ADDRESS}:4000/api/v1/likes/${foundLike.id}`;
-
-    const reqObj = {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Accepts: "application/json",
-      },
-      body: JSON.stringify({ id: foundLike.id }),
-    };
-
-    fetch(deleteLikeURL, reqObj)
-      .then((resp) => resp.json())
-      .then((obj) => {
-        if (obj.status === 200) {
-          let newCurrentUserLikes = this.state.currentUserLikes.filter(
-            (like) => like.id !== foundLike.id
-          );
-          this.setState({
-            isLiked: false,
-            currentUserLikes: newCurrentUserLikes,
-          });
-        } else {
-          console.log(obj.message);
-          this.setState({
-            isLiked: false,
-          });
-        }
-      })
-      .catch((err) => console.log(err));
+    this.props.removeLike(dealLike);
   };
 
-  handleLikeDealPress = () => {
-    if (this.state.isLiked === false) {
-      this.createLike();
+  likeCountHandler = (operator) => {
+    if (operator === "+") {
       this.setState((prevState) => {
         return {
           likesCount: prevState.likesCount + 1,
         };
       });
-    } else if (this.state.isLiked === true) {
-      this.deleteLike();
+    } else if (operator === "-") {
       this.setState((prevState) => {
         return {
           likesCount: prevState.likesCount - 1,
@@ -135,9 +78,45 @@ class Deal extends Component {
     }
   };
 
+  handleLikeDealPress = () => {
+    if (this.state.isLiked === false) {
+      this.createLike();
+      this.likeCountHandler("+");
+      this.setState({
+        isLiked: true,
+      });
+    } else if (this.state.isLiked === true) {
+      this.deleteLike();
+      this.likeCountHandler("-");
+      this.setState({
+        isLiked: false,
+      });
+    }
+  };
+
+  addCommentNum = () => {
+    this.setState((prevState) => {
+      return {
+        commentsCount: prevState.commentsCount + 1,
+      };
+    });
+  };
+
+  minusCommentNum = () => {
+    this.setState((prevState) => {
+      return {
+        commentsCount: prevState.commentsCount - 1,
+      };
+    });
+  };
+
   render() {
     return (
-      <View style={styles.dealCard}>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={styles.dealCard}
+        onPress={this.handleDealPress}
+      >
         <Text style={styles.dealTitle}>{this.props.deal.title}</Text>
         <Text style={styles.dealDetails}>
           Posted by {this.props.deal.business.name} on{" "}
@@ -174,7 +153,7 @@ class Deal extends Component {
             {this.state.commentsCount}
           </Text>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
@@ -235,12 +214,18 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
+    dealComments: state.dealComments,
     user: state.user,
+    userLikes: state.userLikes,
   };
 };
 
-const mapDispatchToProps = (disptach) => {
-  return {};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchUserLikes: (user) => dispatch(fetchUserLikes(user)),
+    addLike: (deal, user, business) => dispatch(addLike(deal, user, business)),
+    removeLike: (dealLike) => dispatch(removeLike(dealLike)),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Deal);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
@@ -15,54 +15,69 @@ import UserHomeScreen from "./app/screens/UserHomeScreen";
 import BusinessHomeScreen from "./app/screens/BusinessHomeScreen";
 import BusinessToolbar from "./app/screens/toolbars/BusinessToolbar";
 import BusinessComponentRight from "./app/screens/toolbars/BusinessComponentRight";
+import ShowDealScreen from "./app/screens/ShowDealScreen";
 import NewDealScreen from "./app/screens/NewDealScreen";
 import EditDealScreen from "./app/screens/EditDealScreen";
-import * as SecureStore from "expo-secure-store";
+import BusinessProfileScreen from "./app/screens/BusinessProfileScreen";
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 const Stack = createStackNavigator();
 
-export default function App() {
-  return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            title: "",
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen
-            name="Welcome"
-            component={WelcomeScreen}
-            options={{ gestureEnabled: false }}
-          />
-          <Stack.Screen name="UserLogin" component={UserLoginScreen} />
-          <Stack.Screen name="UserRegister" component={UserRegisterScreen} />
-          <Stack.Screen name="BusinessLogin" component={BusinessLoginScreen} />
-          <Stack.Screen
-            name="BusinessRegister"
-            component={BusinessRegisterScreen}
-          />
-          <Stack.Screen
-            name="UserHome"
-            component={UserHomeScreen}
-            options={{ gestureEnabled: false }}
-          />
-          <Stack.Screen
-            name="BusinessHome"
-            component={BusinessHomeScreen}
-            options={{ gestureEnabled: false }}
-          />
-          <Stack.Screen name="BusinessToolbar" component={BusinessToolbar} />
-          <Stack.Screen
-            name="BusinessComponentRight"
-            component={BusinessComponentRight}
-          />
-          <Stack.Screen name="NewDeal" component={NewDealScreen} />
-          <Stack.Screen name="EditDeal" component={EditDealScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
-  );
+class App extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              title: "",
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen
+              name="Welcome"
+              component={WelcomeScreen}
+              options={{ gestureEnabled: false }}
+            />
+            <Stack.Screen name="UserLogin" component={UserLoginScreen} />
+            <Stack.Screen name="UserRegister" component={UserRegisterScreen} />
+            <Stack.Screen
+              name="BusinessLogin"
+              component={BusinessLoginScreen}
+            />
+            <Stack.Screen
+              name="BusinessRegister"
+              component={BusinessRegisterScreen}
+            />
+            <Stack.Screen
+              name="UserHome"
+              component={UserHomeScreen}
+              options={{ gestureEnabled: false }}
+            />
+            <Stack.Screen
+              name="BusinessHome"
+              component={BusinessHomeScreen}
+              options={{ gestureEnabled: false }}
+            />
+            <Stack.Screen name="BusinessToolbar" component={BusinessToolbar} />
+            <Stack.Screen
+              name="BusinessComponentRight"
+              component={BusinessComponentRight}
+            />
+            <Stack.Screen name="ShowDeal" component={ShowDealScreen} />
+            <Stack.Screen name="NewDeal" component={NewDealScreen} />
+            <Stack.Screen name="EditDeal" component={EditDealScreen} />
+            <Stack.Screen
+              name="BusinessProfile"
+              component={BusinessProfileScreen}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
+    );
+  }
 }
+
+console.disableYellowBox = true;
+
+export default App;

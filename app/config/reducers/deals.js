@@ -6,6 +6,9 @@ const deals = (state = [], action) => {
     case "ADD_DEAL":
       return [...state, action.deal];
 
+    case "SEARCH_DEALS":
+      return state.filter((deal) => deal.business.name === action.searchQuery);
+
     default:
       return state;
   }
