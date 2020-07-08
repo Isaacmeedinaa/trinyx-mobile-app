@@ -19,6 +19,7 @@ import ShowDealScreen from "./app/screens/ShowDealScreen";
 import NewDealScreen from "./app/screens/NewDealScreen";
 import EditDealScreen from "./app/screens/EditDealScreen";
 import BusinessProfileScreen from "./app/screens/BusinessProfileScreen";
+import BusinessShowDealScreen from "./app/screens/BusinessShowDealScreen";
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 const Stack = createStackNavigator();
@@ -65,6 +66,10 @@ class App extends Component {
               component={BusinessComponentRight}
             />
             <Stack.Screen name="ShowDeal" component={ShowDealScreen} />
+            <Stack.Screen
+              name="BusinessShowDeal"
+              component={BusinessShowDealScreen}
+            />
             <Stack.Screen name="NewDeal" component={NewDealScreen} />
             <Stack.Screen name="EditDeal" component={EditDealScreen} />
             <Stack.Screen
