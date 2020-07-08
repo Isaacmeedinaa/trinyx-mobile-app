@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  Modal,
 } from "react-native";
 import { connect } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
@@ -15,6 +16,14 @@ import { deleteBusinessDeal } from "../config/actions/businessDealsActions";
 import colors from "../config/colors";
 
 class BusinessDeal extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      visibleModal: false,
+    };
+  }
+
   handleEditDealPress = () => {
     this.props.navigation.navigate("EditDeal", {
       dealId: this.props.deal.id,
@@ -62,7 +71,12 @@ class BusinessDeal extends Component {
     );
   };
 
-  handleBusinessDealPress = () => {};
+  handleBusinessDealPress = () => {
+    this.props.navigation.navigate("BusinessShowDeal", {
+      businessDealId: this.props.deal.id,
+      deal: this.props.deal,
+    });
+  };
 
   render() {
     return (
@@ -85,7 +99,7 @@ class BusinessDeal extends Component {
         </Text>
         <View style={styles.dealLikesContainer}>
           <TouchableOpacity style={styles.dealLikeButton}>
-            <Ionicons name="ios-flame" size={17} color={colors.primary} />
+            <Ionicons name="ios-heart" size={17} color={colors.primary} />
           </TouchableOpacity>
           <Text style={styles.dealLikeCount}>{this.props.deal.like_count}</Text>
           <TouchableOpacity style={styles.dealCommentButton}>
